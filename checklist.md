@@ -15,3 +15,8 @@
 
 ## 4. Check Ports
 - Run `sudo lsof -i -P -n | grep -v "(ESTABLISHED)"`
+
+## 5. Rootkits and malware
+- Run `sudo dnf install rkhunter` to install Rootkit Hunter
+- Run `sudo rkhunter --update` to ensure Rootkit Hunter has the latest information
+- Run Rootkit Hunter with `sudo rkhunter -c`
