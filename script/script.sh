@@ -280,3 +280,206 @@ echo -e "[ i ] Ensuring TFTP client is not installed..."
 dnf remove -y tftp &> /dev/null
 overwrite "${YES} Ensured TFTP client is not installed"
 
+echo -e "[ i ] Ensuring SCTP is disabled..."
+printf "
+install sctp /bin/true
+" >> /etc/modprobe.d/sctp.conf
+overwrite "${YES} Ensured SCTP is disabled"
+
+echo -e "[ i ] Ensuring DCCP is disabled..."
+printf "
+install dccp /bin/true
+" >> /etc/modprobe.d/dccp.conf
+overwrite "${YES} Ensured DCCP is disabled"
+
+echo -e "[ i ] Ensuring network forwarding is disabled..."
+printf "
+net.ipv4.ip_forward = 0
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.ip_forward=0 &> /dev/null
+sysctl -w net.ipv4.route.flush=1 &> /dev/null
+printf "
+net.ipv6.conf.all.forwarding = 0
+" >> /etc/sysctl.d/60-netipv6_sysctl.conf
+sysctl -w net.ipv6.conf.all.forwarding=0 &> /dev/null
+sysctl -w net.ipv6.route.flush=1 &> /dev/null
+overwrite "${YES} Ensured network forwarding is disabled"
+
+echo -e "[ i ] Ensuring packet redirect sending is disabled..."
+printf "
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.conf.all.send_redirects=0
+sysctl -w net.ipv4.conf.default.send_redirects=0
+sysctl -w net.ipv4.route.flush=1
+overwrite "${YES} Ensured packet redirect sending is disabled"
+
+echo -e "[ i ] Ensuring source routed packets are not accepted..."
+printf "
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.default.accept_source_route = 0
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.conf.all.accept_source_route=0
+sysctl -w net.ipv4.conf.default.accept_source_route=0
+sysctl -w net.ipv4.route.flush=1
+printf "
+net.ipv6.conf.all.accept_source_route = 0
+net.ipv6.conf.default.accept_source_route = 0
+" >> /etc/sysctl.d/60-netipv6_sysctl.conf
+sysctl -w net.ipv6.conf.all.accept_source_route=0
+sysctl -w net.ipv6.conf.default.accept_source_route=0
+sysctl -w net.ipv6.route.flush=1
+overwrite "${YES} Ensured source routed packets are not accepted"
+
+echo -e "[ i ] Ensuring ICMP redirects are not accepted..."
+printf "
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.conf.all.accept_redirects=0
+sysctl -w net.ipv4.conf.default.accept_redirects=0
+sysctl -w net.ipv4.route.flush=1
+printf "
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+" >> /etc/sysctl.d/60-netipv6_sysctl.conf
+sysctl -w net.ipv6.conf.all.accept_redirects=0
+sysctl -w net.ipv6.conf.default.accept_redirects=0
+sysctl -w net.ipv6.route.flush=1
+overwrite "${YES} Ensured ICMP redirects are not accepted"
+
+echo -e "[ i ] Ensuring secure ICMP redirects are not accepted..."
+printf "
+net.ipv4.conf.all.secure_redirects = 0
+net.ipv4.conf.default.secure_redirects = 0
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.conf.all.secure_redirects=0
+sysctl -w net.ipv4.conf.default.secure_redirects=0
+sysctl -w net.ipv4.route.flush=1
+overwrite "${YES} Ensured secure ICMP redirects are not accepted"
+
+echo -e "[ i ] Ensuring suspicious packets are logged..."
+printf "
+net.ipv4.conf.all.log_martians = 1
+net.ipv4.conf.default.log_martians = 1
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.conf.all.log_martians=1
+sysctl -w net.ipv4.conf.default.log_martians=1
+sysctl -w net.ipv4.route.flush=1
+overwrite "${YES} Ensured suspicious packets are logged"
+
+echo -e "[ i ] Ensuring broadcast ICMP requests are ignored..."
+printf "
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=1
+sysctl -w net.ipv4.route.flush=1
+overwrite "${YES} Ensured broadcast ICMP requests are ignored"
+
+echo -e "[ i ] Ensuring bogus ICMP responses are ignored..."
+printf "
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.icmp_ignore_bogus_error_responses=1
+sysctl -w net.ipv4.route.flush=1
+overwrite "${YES} Ensured bogus ICMP responses are ignored"
+
+echo -e "[ i ] Ensuring reverse path filtering is enabled..."
+printf "
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.rp_filter = 1
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.conf.all.rp_filter=1
+sysctl -w net.ipv4.conf.default.rp_filter=1
+sysctl -w net.ipv4.route.flush=1
+overwrite "${YES} Ensured reverse path filtering is enabled"
+
+echo -e "[ i ] Ensuring TCP SYN Cookies is enabled..."
+printf "
+net.ipv4.tcp_syncookies = 1
+" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl -w net.ipv4.tcp_syncookies=1
+sysctl -w net.ipv4.route.flush=1
+overwrite "${YES} Ensured TCP SYN Cookies is enabled"
+
+echo -e "[ i ] Ensuring IPv6 router advertisements are not accepted..."
+printf "
+net.ipv6.conf.all.accept_ra = 0
+net.ipv6.conf.default.accept_ra = 0
+" >> /etc/sysctl.d/60-netipv6_sysctl.conf
+sysctl -w net.ipv6.conf.all.accept_ra=0
+sysctl -w net.ipv6.conf.default.accept_ra=0
+sysctl -w net.ipv6.route.flush=1
+overwrite "${YES} Ensured IPv6 router advertisements are not accepted"
+
+echo -e "[ i ] Ensuring IPv6 redirects are not accepted..."
+printf "
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+" >> /etc/sysctl.d/60-netipv6_sysctl.conf
+sysctl -w net.ipv6.conf.all.accept_redirects=0
+sysctl -w net.ipv6.conf.default.accept_redirects=0
+sysctl -w net.ipv6.route.flush=1
+overwrite "${YES} Ensured IPv6 redirects are not accepted"
+
+echo -e "[ i ] Ensuring firewalld is installed..."
+dnf install firewalld iptables
+overwrite "${YES} Ensured firewalld is installed"
+
+echo -e "[ i ] Ensuring iptables-services is not installed with firewalld..."
+systemctl stop iptables
+systemctl stop ip6tables
+dnf remove iptables-services
+overwrite "${YES} Ensured iptables-services is not installed with firewalld"
+
+echo -e "[ i ] Ensuring nftables is not installed or masked with firewalld..."
+dnf remove nftables
+overwrite "${YES} Ensured nftables is not installed or masked with firewalld"
+
+echo -e "[ i ] Ensuring firewalld service is enabled and running..."
+systemctl unmask firewalld
+systemctl --now enable firewalld
+overwrite "${YES} Ensured firewalld service is enabled and running"
+
+echo -e "[ i ] Ensuring firewalld default zone is set..."
+firewall-cmd --set-default-zone=work
+overwrite "${YES} Ensured firewalld default zone is set"
+
+echo -e "[ i ] Ensuring auditd is installed..."
+dnf install audit
+overwrite "${YES} Ensured auditd is installed"
+
+echo -e "[ i ] Ensuring auditd service is enabled..."
+systemctl --now enable auditd
+overwrite "${YES} Ensured auditd service is enabled"
+
+echo -e "[ i ] Ensuring auditing for processes that start prior to auditd is enabled..."
+grubby --update-kernel ALL --args 'audit=1'
+overwrite "${YES} Ensured auditing for processes that start prior to auditd is enabled"
+
+echo -e "[ i ] Ensuring audit_backlog_limit is sufficient..."
+grubby --update-kernel ALL --args 'audit_backlog_limit=8192'
+overwrite "${YES} Ensured audit_backlog_limit is sufficient"
+
+echo -e "[ i ] Updating auditd configuration file..."
+cp auditd.conf /etc/audit/auditd.conf
+overwrite "${YES} Updated auditd configuration file"
+
+echo -e "[ i ] Ensuring changes to system administration scope (sudoers) is collected..."
+printf "
+-w /etc/sudoers -p wa -k scope
+-w /etc/sudoers.d -p wa -k scope
+" >> /etc/audit/rules.d/50-scope.rules
+augenrules --load
+overwrite "${YES} Ensured changes to system administration scope (sudoers) is collected"
+
+echo -e "[ i ] Ensuring actions as another user are always logged..."
+printf "
+-a always,exit -F arch=b64 -C euid!=uid -F auid!=unset -S execve -k
+user_emulation
+-a always,exit -F arch=b32 -C euid!=uid -F auid!=unset -S execve -k
+user_emulation
+" >> /etc/audit/rules.d/50-user_emulation.rules
+augenrules --load
+overwrite "${YES} Ensured actions as another user are always logged"

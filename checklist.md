@@ -28,3 +28,12 @@
 - Run `sudo dnf install rkhunter` to install Rootkit Hunter
 - Run `sudo rkhunter --update` to ensure Rootkit Hunter has the latest information
 - Run Rootkit Hunter with `sudo rkhunter -c`
+
+## 6. Configure firewall
+
+- After running the script, use `firewall-cmd` to configure the firewall to only allow traffic on the ports required by the services you have installed
+
+## 7. Reboot to update audit rules if needed
+
+- if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot
+required to load rules\n"; fi
